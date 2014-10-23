@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 			
 		}
 	}
-	printf_Enable = 3;
+//	printf_Enable = 3;
 	if (nDaemon)
 	{
 		daemon(0, 0);

@@ -7,6 +7,8 @@
 #include <termios.h>
 #include <sys/time.h>
 #include <nc_ipc.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #include "Common.h"
 #include "Queue.h"
 #include "SerialComm.h"
@@ -36,8 +38,39 @@ int ReadChar(unsigned char *pChar, int offset, int nLen)
 		return ReturnError;
 	}
 	/*read 只有一个线程执行，不需要锁*/
-	int nRetRead = usb_read(g_hSerialDevFd, (char *)pChar, offset, nLen, -1);
-	TRACE("usb_read:%d\n", nRetRead);
+	int nRetRead = 0;
+	fd_set readfds;
+	struct timeval timeout={0,0};
+	int ret = 0;
+	while(0 == ret && 0 != g_hSerialDevFd)
+	{
+		FD_ZERO(&readfds);
+		FD_SET(g_hSerialDevFd, &readfds);
+		TRACE("g_hSerialDevFd:%d\n", g_hSerialDevFd);
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
+		int maxfd = g_hSerialDevFd + 1;
+		ret = select(maxfd, &readfds, NULL, NULL, &timeout);
+//		perror("select");
+		TRACE("select:%d\n", ret);
+		if (0 == ret)
+		{
+			continue;
+		}
+		else if(-1 == ret)
+		{
+			break;
+		}
+		else
+		{
+			if(FD_ISSET(g_hSerialDevFd,&readfds))
+			{
+				nRetRead = usb_read(g_hSerialDevFd, (char *)pChar, offset, nLen, 0);
+				TRACE("usb_read:%d\n", nRetRead);
+				break;
+			}
+		}
+	}
 	return nRetRead;
 }
 
