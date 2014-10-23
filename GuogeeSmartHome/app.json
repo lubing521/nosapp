@@ -1,0 +1,22 @@
+{
+	"appsign":"com.chinatelecom.leike.smartgateway.GuogeeSmartHome",
+	"appname":"GuogeeSmartHome",
+	"version":"1.0.0",
+	"dep_version":"1.0.0",
+	"description":"果谷智能,让您的生活变得更轻松",
+	"bin_start":"./ismartus",
+	"author":"dengjunyong",
+	"URL":"www.guogee.com",
+	"maintainer":"guogee",
+	"email":"",
+	"app_type":"local",
+	"icon":"./icon.png",
+	"rom_use":30,
+	"ram_use":10,
+	"start_reboot":"no",
+	"uninstall_reboot":"no",
+	"disable_reboot":"no",
+	"uninstall":"yes",
+	"disable":"yes",
+	"right":"root"
+}
