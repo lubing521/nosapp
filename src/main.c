@@ -130,6 +130,8 @@ int main(int argc, char *argv[])
 	while(1) {
 		FD_ZERO(&fds);
 		IGD_FD_SET(nlh.sock_fd, &fds);
+		tv.tv_sec = 10;
+		tv.tv_usec = 0;
 
 		if ((r = select(max_fd+1, &fds, NULL, NULL, &tv)) < 0) {
 			if (errno == EINTR || errno == EAGAIN)
